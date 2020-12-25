@@ -1,0 +1,11 @@
+FROM mcr.microsoft.com/dotnet/sdk:5.0-alpine as builder
+RUN mkdir code
+WORKDIR code
+COPY . .
+RUN dotnet build -c release
+FROM mcr.microsoft.com/dotnet/aspnet:5.0-alpine
+COPY --from=builder /code/ConsulTest/bin/Release/net5.0 .
+EXPOSE 8888
+CMD ["dotnet", "ConsulTest.dll"]
+
+
